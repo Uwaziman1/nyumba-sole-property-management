@@ -2,26 +2,20 @@
 
 Checked on 11 October 2026.
 
-Public sample suite: **9 passed in 0.42 seconds**. Tests ran against the existing local Python environment; fresh dependency installation was not performed. The samples require no environment file, database connection, external account or provider transport.
+Public samples: **9 passed in 0.56 seconds**. These validate decimal rent/deposit values, date boundaries, provider reference aliases and positive amounts; they need no database or credentials.
 
-Tests cover decimal rent/deposit values, rejected nonpositive rent and negative deposit, lease end-date boundaries, both provider reference spellings and rejected nonpositive payment amounts. They do not validate the full application.
+Private application: **29 passed, none skipped** on disposable PostgreSQL 18. The real migration runner applied all ten migrations and safely skipped them on repeat execution. Tests exercised partial/split/catch-up payments and unapplied credit, concurrent allocation limits, duplicate and conflicting callbacks, unmatched replay, callback token/shortcode validation, receipt and renewal retries, worker concurrency and exhaustion, persistent OTP lockout, tenant/owner signing under a non-superuser role, replay rejection, document tamper checks and final PDF hash/download. Temporary databases were removed. Transport was mocked; no live provider delivery occurred.
 
-The earlier full sanitized copy passed 15 tests with one PostgreSQL test skipped. Those results belong to that separate copy and are not a full-system validation claim for this repository.
+The SQL sample combines allocation schema and its subsequent integrity migration. It still requires the full private schema and cannot run standalone. The public tests do not execute that SQL; the PostgreSQL results belong to the private app.
 
-The SQL excerpt requires private schema dependencies and was not executed here. Its shared payment-row lock is insufficient evidence of serialized concurrent allocation; invoice capacity and payment/invoice relationship checks need further review. It is engineering evidence with disclosed limitations, not a production-ready standalone accounting library.
+The eight screenshots remain synthetic browser-preview captures. They were visually reviewed and exercise navigation, onboarding through rent terms, messages and unsigned agreement screens. They do not demonstrate live providers or persisted signatures. The new API/database evidence is separate from those images.
 
-The sanitized browser preview was exercised for Home, Payments, Owner's Corner, property selection, onboarding through the rent/lease step, Messages and the two unsigned agreement screens. Eight screenshots were captured and visually reviewed. A local-only harness served sanitized source pages and fixed synthetic JSON fixtures; it did not load the database workspace extension or provider adapters. Capture-only adjustments quoted renamed property keys and generalized additional wizard fixtures. No email, signature or tenant-save action occurred.
+## Limits
 
-No report visual QA, database migration/seed run, end-to-end signing test, provider sandbox validation or production deployment was performed for this package. The full source includes overlapping legacy/new signing handlers and provisional eTIMS transport shapes.
+Messages have bounded, at-least-once retries; provider acceptance is distinct from handset delivery. A crash between remote acceptance and local confirmation may repeat a notification, while financial callback processing remains deduplicated. Callback registration/network restrictions and live sandbox behavior, KRA shapes/tax applicability, report visual QA, backup/restore, signing browser usability and legal/identity assurance remain production-dependent. The single signing workflow was tested through the API, not claimed as a certified signature.
 
-## Included public files
+## Public scope
 
-- README, rights notice, this validation record and contents manifest.
-- Two selected Python validation models and an empty package initializer.
-- One payment-allocation SQL excerpt.
-- Focused synthetic-data tests, minimal dependency pins and exclusion rules.
-- Eight safe browser screenshots and two illustrated walkthroughs.
+Included: README, rights notice, validation, one brief case study, two illustrated tours, eight synthetic screenshots, two selected Python models, the allocation excerpt and focused sample tests.
 
-Excluded: full backend, UI, authentication and signing implementation, report generators, worker, provider adapters, complete schema, deployment configuration, all environment files, credentials, tenant records, signing evidence, generated PDFs/screenshots, local paths and original Git history.
-
-The full sanitized application remains local. Only this smaller folder is designated for public publication. Public availability permits viewing/downloading; the rights notice does not prevent technical copying.
+Excluded: full app, UI, authentication/signing implementation, report generators, workers, provider adapters, complete schema, deployment configuration, environment files, credentials, real tenant records, PDF/signature evidence, local paths and original Git history. The complete sanitized app is maintained privately.

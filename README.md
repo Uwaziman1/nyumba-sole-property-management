@@ -12,6 +12,8 @@ The full application is maintained separately in a private repository. This publ
 
 ![Owner overview with synthetic rent totals](assets/screenshots/01-owner-overview.jpg)
 
+Read the [brief case study](docs/CASE_STUDY.md) for the manual problem, implementation decisions and a tested exception.
+
 See the [two-minute recruiter walkthrough](docs/RECRUITER_WALKTHROUGH.md) and [engineering walkthrough](docs/ENGINEERING_WALKTHROUGH.md). Eight screenshots show the sanitized application screens with synthetic fixtures. Each carries a visible preview banner. These are browser captures of a local UI harness, not evidence of a live database, provider delivery or completed signatures. Full UI source and the capture harness remain outside this repository.
 
 ## Engineering evidence you can inspect
@@ -23,7 +25,7 @@ See the [two-minute recruiter walkthrough](docs/RECRUITER_WALKTHROUGH.md) and [e
 | [Allocation migration excerpt](samples/payment_allocations.sql) | Separate payment/invoice allocation records, append-only triggers and numeric accounting |
 | [Executable sample tests](tests/test_samples.py) | Accepted/rejected financial terms, date boundaries and provider field variants |
 
-The Python samples were extracted from the project and stripped of application configuration and transport dependencies. Tests use synthetic fixtures. The SQL is an unchanged sanitized source excerpt, dependent on the full application schema; it cannot be applied as a standalone migration.
+The Python samples were extracted from the project and stripped of application configuration and transport dependencies. Tests use synthetic fixtures. The SQL combines sanitized allocation-schema and follow-up integrity excerpts, dependent on the full application schema; it cannot be applied as a standalone migration.
 
 ## Full-project architecture
 
@@ -40,7 +42,7 @@ flowchart LR
     DB --> Outbox[eTIMS submission tracking]
 ```
 
-The full project includes nine PostgreSQL migrations. Its records separate holdings, properties, units, tenants, leases, rent terms, invoices, received payments, allocations, receipts, communications and agreement evidence. Authentication, roles, property membership and PostgreSQL row-level security define access boundaries; production needs properly separated runtime and migration roles.
+The full project includes ten PostgreSQL migrations. Its records separate holdings, properties, units, tenants, leases, rent terms, invoices, received payments, allocations, receipts, communications and agreement evidence. Authentication, roles, property membership and PostgreSQL row-level security define access boundaries; production needs properly separated runtime and migration roles.
 
 ## Workflows represented in the project
 
@@ -56,10 +58,10 @@ These descriptions come from inspecting the full source. They are not claims of 
 
 | Area | Local/project implementation | Still requires production work |
 |---|---|---|
-| PostgreSQL | Migrations, accounting queries, lifecycle history | Fresh reconciliation, least-privilege roles, backup/restore and monitoring |
+| PostgreSQL | Migrations, accounting queries, lifecycle history | Broader reconciliation, deployment grants, backup/restore and monitoring |
 | M-Pesa | Event parsing, routing, de-duplication, allocation code | Approved Paybill, credentials, secured callbacks, sandbox validation |
-| SMS/email | Mock delivery and adapter implementations | Approved senders, credentials, delivery/retry and consent testing |
-| Signing | Document versions, OTP/consent evidence and finalization code | Resolve overlapping legacy/new signing routes; validate identity, delivery, legal wording and retention |
+| SMS/email | Mock delivery and adapter implementations | Approved senders, credentials, actual delivery reports and consent review |
+| Signing | Single versioned route; OTP lockout, consent and finalization tested on PostgreSQL | Provider/identity assurance, browser usability, legal wording and retention |
 | KRA/eTIMS | Configurable adapter and submission tracking | Provisioned endpoint/payload validation, applicable tax treatment and provider approval |
 | Reports | PDF generators and database queries | Fresh reconciliation and visual output verification |
 
@@ -78,7 +80,7 @@ python -m pytest -q
 
 No database, environment file, cloud account or provider credentials are needed. These tests validate the Python samples only. They do not execute SQL, exercise concurrent payment allocation or verify full reports/signing.
 
-The allocation excerpt needs further concurrency review: a shared payment-row lock alone should not be treated as proof against simultaneous over-allocation. Invoice-capacity and relationship checks also need review before operational use. See [validation and limits](docs/VALIDATION.md).
+The follow-up allocation excerpt uses exclusive reservation locks and checks payment limits, invoice capacity and unit relationships. These behaviors were exercised by the private application’s disposable PostgreSQL concurrency tests. The public sample suite itself does not execute SQL. See [validation and limits](docs/VALIDATION.md).
 
 ## Source protection and privacy
 
