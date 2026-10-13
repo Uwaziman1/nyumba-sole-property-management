@@ -1,6 +1,6 @@
 # Workflow validation
 
-Checked on **13 October 2026**: **79 passed, 0 failed, 0 skipped, in 49.50 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
+Checked on **14 October 2026**: **83 passed, 0 failed, 0 skipped, in 55.32 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
 
 **Daraja status: provider requests accepted; payment callback delivery unresolved.** Safaricom accepted both C2B v1/v2 registration checks (ResponseCode `00000000`) and their separately identified 12,000 sandbox simulations (ResponseCode `0`). No provider confirmation reached the receiver during either three-minute diagnostic wait. Our separate fictional HTTPS confirmation did reach the receiver and was stored once in the durable unmatched-payment queue. The receiver status log contained only our requests. Provider callback delivery and the 12,000 + 8,000 provider scenario remain unverified; the second provider payment was not requested in either diagnostic.
 
@@ -14,6 +14,12 @@ The integration run demonstrated a client defect: C2B v2's padded-zero registrat
 
 A further controlled check used a separately approved LocalTunnel HTTPS connection, an alternative recommended for local testing in Safaricom's getting-started guidance. Safaricom accepted registration and a new, separately identified 12,000 simulation, but no provider request reached any receiver route during the three-minute wait. The second provider payment was not requested. A separate fresh synthetic session through LocalTunnel then reconciled 12,000 + 8,000, two receipts, two allocations, a zero balance, duplicate replay, both receipt PDF contents and the statement; two notification jobs were mocked. Together with the earlier Cloudflare synthetic check, this verifies the application path through two temporary connections. It does not establish why Safaricom's confirmation was absent or prove provider delivery. All temporary services and disposable databases were stopped and removed. The next action is a provider-side delivery investigation, rather than blindly repeating accepted simulations.
 
+## Further sandbox diagnostics
+
+The simulator payload now sends shortcode and test MSISDN as JSON numbers, following the current provider contract. A query-free authenticated callback experiment also passed our own validation check without writing rent. A separate accepted provider simulation was observed for more than fifteen minutes without a confirmation. A later registration attempt using the portal test preset was rejected before any payment request; its cause remains unverified. HTTP status, numeric provider error code and an allowlisted error category are now available without exposing descriptions, callback tokens or provider identifiers. New regression cases verify that private provider content is omitted. No blind payment resubmission or support email was sent.
+
+A stable hosted sandbox transit queue is being prepared separately. It is not yet evidence of genuine provider delivery. The full application and PostgreSQL remain local.
+
 ## Behavior checked on PostgreSQL
 
 - Partial payments of 12,000 + 8,000 against 20,000; separate 10,000 receipts; catch-up allocation of 5,000 old debt then 20,000 current rent; oldest-debt-first handling and visible unapplied credit.
@@ -26,7 +32,7 @@ A further controlled check used a separately approved LocalTunnel HTTPS connecti
 
 ## Earlier results
 
-Earlier workflow/weekly increments passed 29, 33 and 35 tests. Daraja preparation then passed 63 tests in 20.48 seconds; local authentication setup passed 72 in 47.01 seconds. Five gateway tests initially ran separately in 1.59 seconds. A subsequent combined run passed 77 in 48.93 seconds before the latest two regression cases. These counts describe historical checks, not additional tests to add to 79. The public sample suite's earlier result remains **9 passed in 0.56 seconds**; it was not rerun for documentation-only public changes.
+Earlier workflow/weekly increments passed 29, 33 and 35 tests. Daraja preparation then passed 63 tests in 20.48 seconds; local authentication setup passed 72 in 47.01 seconds. Five gateway tests initially ran separately in 1.59 seconds. A subsequent combined run passed 77 in 48.93 seconds before the latest two regression cases. A later 79-test check preceded the four safe-provider-diagnostics regression cases in the current 83-test suite. These counts describe historical checks, not additional tests to add to 83. The public sample suite's earlier result remains **9 passed in 0.56 seconds**; it was not rerun for documentation-only public changes.
 
 ## Reproduce
 
