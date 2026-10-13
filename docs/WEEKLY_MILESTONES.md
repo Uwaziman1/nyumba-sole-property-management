@@ -49,6 +49,10 @@ The temporary HTTPS receiver exposed only two authenticated callback POST routes
 
 The integration run demonstrated a client defect: C2B v2's padded-zero registration success was initially rejected. Registration now accepts exactly `0` and `00000000`; other codes remain failures and payment simulation remains strict. An offline check rejects the STK sandbox shortcode for this C2B flow. Callback diagnostics record only fixed route names, response status and permitted schema field names, with no token, query, contact or payload output.
 
+## Alternate connection evidence
+
+A further controlled check used a separately approved LocalTunnel HTTPS connection, an alternative recommended for local testing in Safaricom's getting-started guidance. Safaricom accepted registration and a new, separately identified 12,000 simulation, but no provider request reached any receiver route during the three-minute wait. The second provider payment was not requested. A separate fresh synthetic session through LocalTunnel then reconciled 12,000 + 8,000, two receipts, two allocations, a zero balance, duplicate replay, both receipt PDF contents and the statement; two notification jobs were mocked. Together with the earlier Cloudflare synthetic check, this verifies the application path through two temporary connections. It does not establish why Safaricom's confirmation was absent or prove provider delivery. All temporary services and disposable databases were stopped and removed. The next action is a provider-side delivery investigation, rather than blindly repeating accepted simulations.
+
 ## Next unfinished milestone
 
 Resolve Safaricom sandbox callback non-arrival. Registration/request acceptance and our HTTPS/database diagnostic are verified; provider delivery is not. Use a controlled session so another portal registration does not change its callback destination. Keep timeout outcomes explicit and do not blindly resubmit a prior transaction. If temporary hosting remains unreliable, provision a stable callback address before a new controlled provider check.

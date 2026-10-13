@@ -1,6 +1,6 @@
 # Workflow validation
 
-Checked on **13 October 2026**: **79 passed, 0 failed, 0 skipped, in 21.05 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
+Checked on **13 October 2026**: **79 passed, 0 failed, 0 skipped, in 49.50 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
 
 **Daraja status: provider requests accepted; payment callback delivery unresolved.** Safaricom accepted both C2B v1/v2 registration checks (ResponseCode `00000000`) and their separately identified 12,000 sandbox simulations (ResponseCode `0`). No provider confirmation reached the receiver during either three-minute diagnostic wait. Our separate fictional HTTPS confirmation did reach the receiver and was stored once in the durable unmatched-payment queue. The receiver status log contained only our requests. Provider callback delivery and the 12,000 + 8,000 provider scenario remain unverified; the second provider payment was not requested in either diagnostic.
 
@@ -8,7 +8,11 @@ An independent check through the real public HTTPS tunnel used our own fictional
 
 The temporary HTTPS receiver exposed only two authenticated callback POST routes. Six owner/admin/report/documentation paths returned 404; unauthenticated intake returned 401. The owner app and database stayed on loopback. Credentials, secret-bearing URLs, raw callbacks, logs, provider identifiers and generated evidence stay outside both repositories. Temporary services were stopped after each bounded check. No real payment or external tenant message was sent.
 
-The integration run demonstrated a client defect: C2B v2's padded-zero registration success was initially rejected. Registration now accepts exactly `0` and `00000000`; other codes remain failures and payment simulation remains strict. An offline check rejects the STK sandbox shortcode for this C2B flow. Callback diagnostics record only fixed route names, response status and permitted schema field names, with no token, query, contact or payload output.
+The integration run demonstrated a client defect: C2B v2's padded-zero registration success was initially rejected. Registration now accepts exactly `0` and `00000000`; other codes remain failures and payment simulation remains strict. An offline check rejects the STK sandbox shortcode for this C2B flow. Callback diagnostics record only fixed route categories, request method, response status and permitted schema field names, with no token, query, contact or payload output.
+
+## Alternate connection check
+
+A further controlled check used a separately approved LocalTunnel HTTPS connection, an alternative recommended for local testing in Safaricom's getting-started guidance. Safaricom accepted registration and a new, separately identified 12,000 simulation, but no provider request reached any receiver route during the three-minute wait. The second provider payment was not requested. A separate fresh synthetic session through LocalTunnel then reconciled 12,000 + 8,000, two receipts, two allocations, a zero balance, duplicate replay, both receipt PDF contents and the statement; two notification jobs were mocked. Together with the earlier Cloudflare synthetic check, this verifies the application path through two temporary connections. It does not establish why Safaricom's confirmation was absent or prove provider delivery. All temporary services and disposable databases were stopped and removed. The next action is a provider-side delivery investigation, rather than blindly repeating accepted simulations.
 
 ## Behavior checked on PostgreSQL
 
