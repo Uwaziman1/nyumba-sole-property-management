@@ -1,6 +1,8 @@
 # Validation and publication scope
 
-Checked on 11 October 2026.
+Latest full-app check: **13 October 2026 — 35 passed, 0 failed, 0 skipped**, migrations 001–011, only isolated `nyumba_sole_test`. All five Owner’s Corner alert destinations and resolved conditions passed a real local-browser check. See [weekly milestones](WEEKLY_MILESTONES.md).
+
+The public sample suite was checked on 11 October 2026; the results below remain historical evidence for that unchanged Python sample surface.
 
 Public samples: **9 passed in 0.56 seconds**. These validate decimal rent/deposit values, date boundaries, provider reference aliases and positive amounts; they need no database or credentials.
 
@@ -12,7 +14,7 @@ The eight screenshots remain synthetic browser-preview captures. They were visua
 
 ## Limits
 
-Messages have bounded, at-least-once retries; provider acceptance is distinct from handset delivery. A crash between remote acceptance and local confirmation may repeat a notification, while financial callback processing remains deduplicated. Callback registration/network restrictions and live sandbox behavior, KRA shapes/tax applicability, report visual QA, backup/restore, signing browser usability and legal/identity assurance remain production-dependent. The single signing workflow was tested through the API, not claimed as a certified signature.
+Messages have bounded, at-least-once retries; provider acceptance is distinct from handset delivery. A crash between remote acceptance and local confirmation may repeat a notification, while financial callback processing remains deduplicated. Callback registration/network restrictions and live sandbox behavior, KRA shapes/tax applicability, report visual QA, backup/restore, broader signing/browser usability and legal/identity assurance remain production-dependent. The single signing workflow was tested through the API, not claimed as a certified signature.
 
 ## Public scope
 

@@ -8,6 +8,8 @@ This repository is a **selected public showcase**, not the full application. The
 
 The full application is maintained separately in a private repository. This public repository is the portfolio link intended for application reviewers.
 
+Latest milestone check: **13 October 2026** — 35 private application tests passed with none skipped, plus a database-backed browser check of all five Owner’s Corner alert types. [Read the completed weekly milestones](docs/WEEKLY_MILESTONES.md).
+
 ## Screenshots and demo tours
 
 ![Owner overview with synthetic rent totals](assets/screenshots/01-owner-overview.jpg)
@@ -42,7 +44,7 @@ flowchart LR
     DB --> Outbox[eTIMS submission tracking]
 ```
 
-The full project includes ten PostgreSQL migrations. Its records separate holdings, properties, units, tenants, leases, rent terms, invoices, received payments, allocations, receipts, communications and agreement evidence. Authentication, roles, property membership and PostgreSQL row-level security define access boundaries; production needs properly separated runtime and migration roles.
+The full project includes eleven PostgreSQL migrations. Its records separate holdings, properties, units, tenants, leases, rent terms, invoices, received payments, allocations, receipts, communications and agreement evidence. Authentication, roles, property membership and PostgreSQL row-level security define access boundaries; production needs properly separated runtime and migration roles.
 
 ## Workflows represented in the project
 
