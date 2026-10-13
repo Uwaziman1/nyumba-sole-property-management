@@ -8,7 +8,7 @@ This repository is a **selected public showcase**, not the full application. The
 
 The full application is maintained separately in a private repository. This public repository is the portfolio link intended for application reviewers.
 
-Latest milestone check: **13 October 2026** — **63 private application tests passed, 0 failed, 0 skipped** on disposable PostgreSQL. Daraja transport was tested with a local substitute; Safaricom registration and callback delivery remain pending account and hosting setup. [Read the Daraja milestone and its limits](docs/DARAJA_MILESTONE.md). Earlier allocation and Owner’s Corner evidence is retained in the [weekly milestones](docs/WEEKLY_MILESTONES.md).
+Latest milestone check: **13 October 2026 — 72 private application tests passed, 0 failed, 0 skipped** on disposable PostgreSQL. Local credential setup and authentication-only transport were tested with fictional credentials and a provider substitute. The owner reports a C2B sandbox app is now created; actual credential acceptance and callback delivery remain unverified. [Daraja milestone and its limits](docs/DARAJA_MILESTONE.md). Earlier allocation and Owner’s Corner evidence is retained in the [weekly milestones](docs/WEEKLY_MILESTONES.md).
 
 ## Screenshots and demo tours
 

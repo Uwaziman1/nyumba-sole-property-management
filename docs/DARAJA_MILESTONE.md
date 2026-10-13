@@ -1,5 +1,7 @@
 # Daraja milestone — prepared locally, provider run pending
 
+Update on 13 October 2026: **72 private application tests passed, 0 failed, 0 skipped, in 47.01 seconds**, with migrations 001–011 on disposable PostgreSQL. The owner reports that a C2B sandbox app is created and is continuing local development. A private local helper now accepts hidden credentials, stores them outside the source repository with owner-only file permissions, and preserves existing settings. Authentication-only mode needs no callback address or database and omits access tokens. Literal credential preservation and production refusal are tested. All provider transport still used fictional credentials and local substitutes; actual authentication and callbacks remain unverified. No hosting was deployed. The earlier 63-test evidence below is retained as history.
+
 On 13 October 2026 the complete private application suite passed **63 tests, 0 failed, 0 skipped, in 20.48 seconds** against a newly created `nyumba_sole_test` on an independent loopback PostgreSQL 18 instance. Migrations 001–011 applied and repeat migration execution was safe. The runner removed the test database, and the disposable instance was stopped and removed afterwards. Existing dependency warnings remain documented; no clean installation or provider connection is claimed.
 
 ## What the additional checks prove
@@ -19,8 +21,8 @@ The callback token is a shared ingress secret, not a Safaricom signature. Full r
 
 ## Exact boundary
 
-**Safaricom acceptance and internet callback delivery have not been verified.** The owner confirmed that neither a sandbox app nor a public callback address is ready. Tests used a local transport substitute, fictional tenants and non-routable contacts. No real payment, external message, account registration or deployment occurred.
+**Safaricom acceptance and internet callback delivery have not been verified.** At the earlier preparation check, neither prerequisite was ready. The sandbox app is now reported created; the public callback address remains pending. Tests used a local transport substitute, fictional tenants and non-routable contacts. No real payment, external message, account registration or deployment occurred.
 
-The next step is to create a sandbox C2B app in the [Safaricom developer portal](https://developer.safaricom.co.ke/), provide an owned public HTTPS callback address and run the private setup guide. The [official C2B documentation](https://developer.safaricom.co.ke/apis/CustomerToBusiness) distinguishes request acceptance, optional validation and payment confirmation. Keys, registered secret-bearing URLs, raw callbacks and operational evidence stay outside this public showcase.
+The next step is to verify the existing sandbox app credentials privately on the local computer. To test incoming payment callbacks, provide an internet-accessible HTTPS address later. NyumbaSole can continue to be built locally. The [Safaricom developer portal](https://developer.safaricom.co.ke/) remains the source of assigned sandbox test data. The [official C2B documentation](https://developer.safaricom.co.ke/apis/CustomerToBusiness) distinguishes request acceptance, optional validation and payment confirmation. Keys, registered secret-bearing URLs, raw callbacks and operational evidence stay outside this public showcase.
 
 Only this summary is public. The transport implementation, sandbox tool and detailed handover remain in the private app repository.

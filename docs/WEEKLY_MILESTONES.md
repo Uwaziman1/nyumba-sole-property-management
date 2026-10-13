@@ -8,6 +8,7 @@ All checks used fictional records. PostgreSQL 18 ran in a new loopback-only inst
 | Exact approved allocation scenarios | Complete | **33 passed, 0 failed, 0 skipped**. No accounting implementation defect found. |
 | Owner’s Corner actions | Complete | **35 passed, 0 failed, 0 skipped**, plus the local browser check described below. Migrations 001–011 applied. |
 | Daraja sandbox preparation | Local preparation complete; provider run pending | **63 passed, 0 failed, 0 skipped**, including locally substituted OAuth/register/simulate transport and real API/PostgreSQL callback reconciliation. No Safaricom connection occurred. |
+| Local sandbox connection setup | Prepared and tested; owner credential check pending | **72 passed, 0 failed, 0 skipped**. Authentication-only mode needs no callback or database, omits access tokens and preserves registration/simulation checks. Credentials remain outside Git. |
 
 The historical 16-test count is superseded by these fresh results. The four work areas remain **Tenants, Owner’s Corner, Payments and Messages**, with Home as the existing overview. The stack remains Python/FastAPI, PostgreSQL/asyncpg and the existing HTML/JavaScript interface. Existing colours and CSS were preserved.
 
@@ -38,4 +39,4 @@ The browser test remains in the private application. It requires Playwright, an 
 
 ## Next unfinished milestone
 
-Create a Daraja sandbox C2B app and provide an owned public HTTPS callback address, then execute and verify Safaricom registration and callback receipt. The owner confirmed that both prerequisites are pending. Local preparation and transport-substitute checks are complete; provider transport is not verified. Production SMS/email delivery reports follow separately. KRA acceptance, backup/restore, full report visual QA and deployment remain separate unfinished work. Do not rework completed allocation/actions without a demonstrated defect or integration need.
+The owner reports a Daraja sandbox C2B app has been created. Enter its keys privately through the local setup tool and verify sandbox authentication. The app can remain local; provide an internet-accessible callback address later, then execute and verify Safaricom registration and callback receipt. Local preparation and transport-substitute checks are complete; provider transport is not verified. Production SMS/email delivery reports follow separately. KRA acceptance, backup/restore, full report visual QA and deployment remain separate unfinished work. Do not rework completed allocation/actions without a demonstrated defect or integration need.
