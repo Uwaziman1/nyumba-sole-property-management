@@ -8,7 +8,7 @@ This repository is a **selected public showcase**, not the full application. The
 
 The full application is maintained separately in a private repository. This public repository is the portfolio link intended for application reviewers.
 
-Latest milestone check: **13 October 2026** — 35 private application tests passed with none skipped, plus a database-backed browser check of all five Owner’s Corner alert types. [Read the completed weekly milestones](docs/WEEKLY_MILESTONES.md).
+Latest milestone check: **13 October 2026** — **63 private application tests passed, 0 failed, 0 skipped** on disposable PostgreSQL. Daraja transport was tested with a local substitute; Safaricom registration and callback delivery remain pending account and hosting setup. [Read the Daraja milestone and its limits](docs/DARAJA_MILESTONE.md). Earlier allocation and Owner’s Corner evidence is retained in the [weekly milestones](docs/WEEKLY_MILESTONES.md).
 
 ## Screenshots and demo tours
 
@@ -61,7 +61,7 @@ These descriptions come from inspecting the full source. They are not claims of 
 | Area | Local/project implementation | Still requires production work |
 |---|---|---|
 | PostgreSQL | Migrations, accounting queries, lifecycle history | Broader reconciliation, deployment grants, backup/restore and monitoring |
-| M-Pesa | Event parsing, routing, de-duplication, allocation code | Approved Paybill, credentials, secured callbacks, sandbox validation |
+| M-Pesa | Event parsing, routing, de-duplication, allocations and locally substituted transport tests | Approved Paybill, credentials, secured callbacks, sandbox validation |
 | SMS/email | Mock delivery and adapter implementations | Approved senders, credentials, actual delivery reports and consent review |
 | Signing | Single versioned route; OTP lockout, consent and finalization tested on PostgreSQL | Provider/identity assurance, browser usability, legal wording and retention |
 | KRA/eTIMS | Configurable adapter and submission tracking | Provisioned endpoint/payload validation, applicable tax treatment and provider approval |

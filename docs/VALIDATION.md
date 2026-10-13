@@ -1,5 +1,7 @@
 # Validation and publication scope
 
+Latest Daraja preparation check: **13 October 2026 — 63 passed, 0 failed, 0 skipped, in 20.48 seconds**, migrations 001–011 on a newly created disposable `nyumba_sole_test`. Provider transport used a local substitute; real Safaricom acceptance and callback delivery are unverified. The existing 60 dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata. Earlier results below are historical evidence. See [Daraja milestone](DARAJA_MILESTONE.md).
+
 Latest full-app check: **13 October 2026 — 35 passed, 0 failed, 0 skipped**, migrations 001–011, only isolated `nyumba_sole_test`. All five Owner’s Corner alert destinations and resolved conditions passed a real local-browser check. See [weekly milestones](WEEKLY_MILESTONES.md).
 
 The public sample suite was checked on 11 October 2026; the results below remain historical evidence for that unchanged Python sample surface.
