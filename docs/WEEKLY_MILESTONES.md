@@ -1,6 +1,6 @@
 # Weekly milestones — 13 October 2026
 
-All checks used fictional records. PostgreSQL 18 ran in a new loopback-only instance, independently of the development installation. Tests targeted **only `nyumba_sole_test`**, refused an existing populated database and removed the newly created database after each run. No operational configuration or passwords were reused or published.
+All checks used fictional records. PostgreSQL 18 ran in a new loopback-only instance, independently of the development installation. Tests targeted **only `nyumba_sole_test`**, refused an existing populated database and removed the newly created database after each run. No development records were accessed. Real sandbox credentials were used only for the provider checks and remain private.
 
 | Milestone | Status | Evidence |
 |---|---|---|
@@ -37,11 +37,18 @@ The reusable private runner now creates only `nyumba_sole_test` on a disposable 
 
 The browser test remains in the private application. It requires Playwright, an installed Chrome browser (or a selected browser channel), a loopback fixture app and the synthetic IDs supplied through `NYUMBA_BROWSER_CONTEXT`. The local orchestration harness and runtime records remain outside both published packages. No environment file, uploaded PDF, generated evidence, database file or credential is included in either repository.
 
+## Current callback milestone
+
+Checked on **13 October 2026**: **79 passed, 0 failed, 0 skipped, in 21.05 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
+
+**Daraja status: provider requests accepted; payment callback delivery unresolved.** Safaricom accepted both C2B v1/v2 registration checks (ResponseCode `00000000`) and their separately identified 12,000 sandbox simulations (ResponseCode `0`). No provider confirmation reached the receiver during either three-minute diagnostic wait. Our separate fictional HTTPS confirmation did reach the receiver and was stored once in the durable unmatched-payment queue. The receiver status log contained only our requests. Provider callback delivery and the 12,000 + 8,000 provider scenario remain unverified; the second provider payment was not requested in either diagnostic.
+
+An independent check through the real public HTTPS tunnel used our own fictional callback payloads: 12,000 left an 8,000 invoice balance, then 8,000 cleared it. Two distinct payments/receipts and 20,000 of allocations reconciled. Replaying the first callback created no extra payment, receipt or automatic delivery job. Both receipt PDF amounts/credit and the tenant statement were checked; two notification jobs used mocked transport. This proves the public receiver-to-PostgreSQL path, not Safaricom callback delivery.
+
+The temporary HTTPS receiver exposed only two authenticated callback POST routes. Six owner/admin/report/documentation paths returned 404; unauthenticated intake returned 401. The owner app and database stayed on loopback. Credentials, secret-bearing URLs, raw callbacks, logs, provider identifiers and generated evidence stay outside both repositories. Temporary services were stopped after each bounded check. No real payment or external tenant message was sent.
+
+The integration run demonstrated a client defect: C2B v2's padded-zero registration success was initially rejected. Registration now accepts exactly `0` and `00000000`; other codes remain failures and payment simulation remains strict. An offline check rejects the STK sandbox shortcode for this C2B flow. Callback diagnostics record only fixed route names, response status and permitted schema field names, with no token, query, contact or payload output.
+
 ## Next unfinished milestone
 
-The owner reports a Daraja sandbox C2B app has been created. The owner has entered the keys privately and supplied the successful sanitized sandbox authentication result. The app can remain local; provide an internet-accessible callback address later, then execute and verify Safaricom registration and callback receipt. Local preparation and transport-substitute checks are complete; OAuth authentication is verified through the owner’s local result; provider registration, callback delivery and payment simulation remain unverified. Production SMS/email delivery reports follow separately. KRA acceptance, backup/restore, full report visual QA and deployment remain separate unfinished work. Do not rework completed allocation/actions without a demonstrated defect or integration need.
-
-
-## Callback receiver preparation
-
-Owner-run provider check, 13 October 2026: the local launcher returned `authenticated: true`, `environment: sandbox`, `callback_verified: false`. Safaricom issued an access token; no token or credentials were shared or stored in these repositories. This verifies sandbox authentication in the owner's reported run, not C2B callbacks or payments. The application remains local. A callback-only receiver is now prepared and its five focused tests passed in 1.59 seconds, with two existing FastAPI dependency warnings. No public tunnel was started. The prior 72-test PostgreSQL result is unchanged; the receiver tests ran separately, not as a combined 77-test database suite.
+Resolve Safaricom sandbox callback non-arrival. Registration/request acceptance and our HTTPS/database diagnostic are verified; provider delivery is not. Use a controlled session so another portal registration does not change its callback destination. Keep timeout outcomes explicit and do not blindly resubmit a prior transaction. If temporary hosting remains unreliable, provision a stable callback address before a new controlled provider check.
