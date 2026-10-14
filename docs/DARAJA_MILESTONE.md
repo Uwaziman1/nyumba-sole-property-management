@@ -1,6 +1,6 @@
 # Daraja milestone — provider requests accepted; payment callback delivery unresolved
 
-Checked on **14 October 2026**: **100 passed, 0 failed, 0 skipped, in 49.36 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
+Checked on **14 October 2026**: **100 passed, 0 failed, 0 skipped, in 56.82 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
 
 **Daraja status: provider requests accepted; payment callback delivery unresolved.** Safaricom accepted both C2B v1/v2 registration checks (ResponseCode `00000000`) and their separately identified 12,000 sandbox simulations (ResponseCode `0`). No provider confirmation reached the receiver during either three-minute diagnostic wait. Our separate fictional HTTPS confirmation did reach the receiver and was stored once in the durable unmatched-payment queue. The receiver status log contained only our requests. Provider callback delivery and the 12,000 + 8,000 provider scenario remain unverified; the second provider payment was not requested in either diagnostic.
 
@@ -20,7 +20,7 @@ A further controlled check used a separately approved LocalTunnel HTTPS connecti
 
 ## Stable receiver and local collection
 
-The owner approved a stable hosted receiver for fictional sandbox events. Public health returned HTTP 200; anonymous confirmation and queue collection returned 401. Fifteen private hosted queue checks and fifteen further checks without platform sign-in passed, including concurrent replay, conflict rejection, personal field stripping and persistence until acknowledgement. The full app, PostgreSQL, tenant records and consumer keys stayed local.
+The owner approved a stable hosted receiver for fictional sandbox events. Public health returned HTTP 200; anonymous confirmation and queue collection returned 401. Fifteen private hosted queue checks and fifteen further checks without platform sign-in passed, including concurrent replay, conflict rejection, personal field stripping and persistence until acknowledgement. The full app, PostgreSQL and tenant records stayed local; consumer credentials were not installed on the receiver or committed to either repository.
 
 Safaricom rejected registration using the portal test preset before any payment request. Registration using the original C2B sandbox shortcode was accepted. A new, separately identified fictional 12,000 simulation was then accepted, but no provider confirmation arrived during a fifteen-minute observation. The second provider payment was not requested. The hosted queue remained empty; local services and the disposable database were removed. The receiver remains available for delayed delivery. No support email or blind payment retry was sent.
 

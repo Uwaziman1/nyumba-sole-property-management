@@ -28,7 +28,7 @@ they do not establish Safaricom callback delivery.
 
 Registration with the portal test preset was rejected before a payment request.
 Registration with the original C2B sandbox shortcode was accepted. This proves
-request acceptance only; actual callback reconciliation remains a separate check.
+request acceptance only; actual callback reconciliation remains a separate check. A separately identified v2 simulation was later accepted but produced no confirmation during its three-minute check. The current client default matches the signed-in portal's v2 simulation endpoint.
 Neither test values, full registered URLs nor provider identifiers belong in source.
 
 ## Local collection
@@ -64,3 +64,5 @@ transports remain mocked in fictional verification. Keep platform logs, runtime
 configurations and generated evidence private. Rotate callback tokens after testing.
 Production Paybill/Till provisioning, provider approval and a production ingress
 security review remain separate work; this receiver intentionally rejects real use.
+
+A further independent v2 control used the documented one-shilling amount and a fresh fictional reference. Its registration and simulation were accepted, but no confirmation arrived during three minutes. No second payment was requested. This does not establish a sandbox balance limit or the reason for non-delivery. Payment requests were stopped; the durable receiver remains available.

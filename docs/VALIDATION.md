@@ -1,6 +1,6 @@
 # Workflow validation
 
-Checked on **14 October 2026**: **100 passed, 0 failed, 0 skipped, in 49.36 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
+Checked on **14 October 2026**: **100 passed, 0 failed, 0 skipped, in 56.82 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
 
 **Daraja status: provider requests accepted; payment callback delivery unresolved.** Safaricom accepted both C2B v1/v2 registration checks (ResponseCode `00000000`) and their separately identified 12,000 sandbox simulations (ResponseCode `0`). No provider confirmation reached the receiver during either three-minute diagnostic wait. Our separate fictional HTTPS confirmation did reach the receiver and was stored once in the durable unmatched-payment queue. The receiver status log contained only our requests. Provider callback delivery and the 12,000 + 8,000 provider scenario remain unverified; the second provider payment was not requested in either diagnostic.
 
@@ -22,7 +22,7 @@ A stable hosted sandbox transit queue and local collector are now implemented an
 
 ## Stable receiver and local collection
 
-The owner approved a stable hosted receiver for fictional sandbox events. Public health returned HTTP 200; anonymous confirmation and queue collection returned 401. Fifteen private hosted queue checks and fifteen further checks without platform sign-in passed, including concurrent replay, conflict rejection, personal field stripping and persistence until acknowledgement. The full app, PostgreSQL, tenant records and consumer keys stayed local.
+The owner approved a stable hosted receiver for fictional sandbox events. Public health returned HTTP 200; anonymous confirmation and queue collection returned 401. Fifteen private hosted queue checks and fifteen further checks without platform sign-in passed, including concurrent replay, conflict rejection, personal field stripping and persistence until acknowledgement. The full app, PostgreSQL and tenant records stayed local; consumer credentials were not installed on the receiver or committed to either repository.
 
 Safaricom rejected registration using the portal test preset before any payment request. Registration using the original C2B sandbox shortcode was accepted. A new, separately identified fictional 12,000 simulation was then accepted, but no provider confirmation arrived during a fifteen-minute observation. The second provider payment was not requested. The hosted queue remained empty; local services and the disposable database were removed. The receiver remains available for delayed delivery. No support email or blind payment retry was sent.
 
@@ -57,3 +57,9 @@ SMS/email transport acceptance does not prove handset/inbox delivery. The worker
 The sanitized migration chain seeds fictional data and is for a new demo database. It must not replace migrations in an operational installation. KRA schemas/tax treatment/provider acceptance, backup/restore, full report visual QA, signing browser usability and production deployment remain separate checks. No legal signature certification, clean dependency installation or container build is claimed.
 
 References: [PostgreSQL locking](https://www.postgresql.org/docs/18/explicit-locking.html), [row security](https://www.postgresql.org/docs/18/ddl-rowsecurity.html), [Safaricom C2B](https://developer.safaricom.co.ke/apis/CustomerToBusiness), [Cloudflare Quick Tunnels](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/).
+
+## Current simulation endpoint
+
+The signed-in Daraja C2B Environments table lists both registration and simulation under v2. The client default, example configuration and transport regression test now use v2 simulation. A fresh full suite passed all 100 cases in 56.82 seconds. An independent new fictional reference was used for a v2 provider check; registration and simulation were accepted, but no confirmation arrived during three minutes. This was not a retry of the earlier accepted v1 request. The second payment was not requested; local services and the disposable database were removed. This fixes a demonstrated configuration discrepancy without claiming it caused the missing callbacks. Current reference: [Daraja C2B portal](https://developer.safaricom.co.ke/dashboard/apis?api=CustomerToBusiness).
+
+A further independent v2 control used the documented one-shilling amount and a fresh fictional reference. Its registration and simulation were accepted, but no confirmation arrived during three minutes. No second payment was requested. This does not establish a sandbox balance limit or the reason for non-delivery. Payment requests were stopped; the durable receiver remains available.
