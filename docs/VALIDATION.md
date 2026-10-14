@@ -1,6 +1,6 @@
 # Workflow validation
 
-Checked on **14 October 2026**: **83 passed, 0 failed, 0 skipped, in 55.32 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
+Checked on **14 October 2026**: **100 passed, 0 failed, 0 skipped, in 49.36 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
 
 **Daraja status: provider requests accepted; payment callback delivery unresolved.** Safaricom accepted both C2B v1/v2 registration checks (ResponseCode `00000000`) and their separately identified 12,000 sandbox simulations (ResponseCode `0`). No provider confirmation reached the receiver during either three-minute diagnostic wait. Our separate fictional HTTPS confirmation did reach the receiver and was stored once in the durable unmatched-payment queue. The receiver status log contained only our requests. Provider callback delivery and the 12,000 + 8,000 provider scenario remain unverified; the second provider payment was not requested in either diagnostic.
 
@@ -18,7 +18,17 @@ A further controlled check used a separately approved LocalTunnel HTTPS connecti
 
 The simulator payload now sends shortcode and test MSISDN as JSON numbers, following the current provider contract. A query-free authenticated callback experiment also passed our own validation check without writing rent. A separate accepted provider simulation was observed for more than fifteen minutes without a confirmation. A later registration attempt using the portal test preset was rejected before any payment request; its cause remains unverified. HTTP status, numeric provider error code and an allowlisted error category are now available without exposing descriptions, callback tokens or provider identifiers. New regression cases verify that private provider content is omitted. No blind payment resubmission or support email was sent.
 
-A stable hosted sandbox transit queue is being prepared separately. It is not yet evidence of genuine provider delivery. The full application and PostgreSQL remain local.
+A stable hosted sandbox transit queue and local collector are now implemented and tested. They are not evidence of genuine provider delivery. The full application and PostgreSQL remain local.
+
+## Stable receiver and local collection
+
+The owner approved a stable hosted receiver for fictional sandbox events. Public health returned HTTP 200; anonymous confirmation and queue collection returned 401. Fifteen private hosted queue checks and fifteen further checks without platform sign-in passed, including concurrent replay, conflict rejection, personal field stripping and persistence until acknowledgement. The full app, PostgreSQL, tenant records and consumer keys stayed local.
+
+Safaricom rejected registration using the portal test preset before any payment request. Registration using the original C2B sandbox shortcode was accepted. A new, separately identified fictional 12,000 simulation was then accepted, but no provider confirmation arrived during a fifteen-minute observation. The second provider payment was not requested. The hosted queue remained empty; local services and the disposable database were removed. The receiver remains available for delayed delivery. No support email or blind payment retry was sent.
+
+The reusable private application collector acknowledges a hosted event only after local PostgreSQL intake confirms commit. An actual FastAPI/PostgreSQL test uses a cloud substitute to lose the first acknowledgement after a 12,000 payment commits. A second collection replays that payment and processes 8,000; only two payments, two receipts, two notification jobs and 20,000 of allocations exist, with zero invoice balance. Notification delivery is mocked. This proves safe local replay, not Safaricom delivery.
+
+The first expanded run passed 80 tests and had 20 setup errors because two test modules attempted to initialize the same database. The new scenario was moved into the existing fixture scope. A fresh full rerun passed all 100 tests, with no skipped cases. See [sandbox relay](SANDBOX_RELAY.md) for the connection and local use.
 
 ## Behavior checked on PostgreSQL
 
@@ -32,7 +42,7 @@ A stable hosted sandbox transit queue is being prepared separately. It is not ye
 
 ## Earlier results
 
-Earlier workflow/weekly increments passed 29, 33 and 35 tests. Daraja preparation then passed 63 tests in 20.48 seconds; local authentication setup passed 72 in 47.01 seconds. Five gateway tests initially ran separately in 1.59 seconds. A subsequent combined run passed 77 in 48.93 seconds before the latest two regression cases. A later 79-test check preceded the four safe-provider-diagnostics regression cases in the current 83-test suite. These counts describe historical checks, not additional tests to add to 83. The public sample suite's earlier result remains **9 passed in 0.56 seconds**; it was not rerun for documentation-only public changes.
+Earlier workflow/weekly increments passed 29, 33 and 35 tests. Daraja preparation then passed 63 tests in 20.48 seconds; local authentication setup passed 72 in 47.01 seconds. Five gateway tests initially ran separately in 1.59 seconds. A subsequent combined run passed 77 in 48.93 seconds before the latest two regression cases. A later 79-test check preceded the four safe-provider-diagnostics regression cases in the earlier 83-test suite. These counts describe historical checks, not additional tests to add to the current 100. The public sample suite's earlier result remains **9 passed in 0.56 seconds**; it was not rerun for documentation-only public changes.
 
 ## Reproduce
 

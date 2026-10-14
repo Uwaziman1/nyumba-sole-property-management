@@ -8,7 +8,7 @@ This repository is a **selected public showcase**, not the full application. The
 
 The full application is maintained separately in a private repository. This public repository is the portfolio link intended for application reviewers.
 
-Latest milestone check: **14 October 2026 — 83 private application tests passed, 0 failed, 0 skipped** on disposable PostgreSQL. Sandbox OAuth, C2B registration and simulation request acceptance were checked with Safaricom. Provider requests accepted; payment callback delivery unresolved. Our separate synthetic payment checks reconciled through Cloudflare and LocalTunnel HTTPS connections. Safaricom confirmation remains unverified; temporary services were stopped after testing. [Verification and limits](docs/VALIDATION.md). Earlier allocation and Owner’s Corner evidence remains in [weekly milestones](docs/WEEKLY_MILESTONES.md).
+Latest milestone check: **14 October 2026 — 100 private application tests passed, 0 failed, 0 skipped** on disposable PostgreSQL. Sandbox OAuth, C2B registration and simulation request acceptance were checked with Safaricom. Provider requests accepted; payment callback delivery unresolved. Our separate synthetic payment checks reconciled through Cloudflare and LocalTunnel HTTPS connections. A separately approved stable receiver and local collector are now implemented and tested. Safaricom accepted a new simulation, but no callback arrived during fifteen minutes. Confirmation remains unverified; local test services were stopped after testing. [Verification and limits](docs/VALIDATION.md). Earlier allocation and Owner’s Corner evidence remains in [weekly milestones](docs/WEEKLY_MILESTONES.md).
 
 ## Screenshots and demo tours
 
