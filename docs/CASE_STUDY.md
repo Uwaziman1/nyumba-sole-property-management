@@ -1,9 +1,29 @@
-# Case study: reliable rent records when messages fail
+# Case study: rent that belongs to the right tenancy
 
-**Manual problem.** Rent tracking across spreadsheets, M-Pesa messages and separate agreement files makes partial payments, arrears and follow-ups difficult to reconcile. This is the problem the project addresses; measured customer savings or production adoption are not claimed.
+**Manual problem.** Payment messages, spreadsheets and separate lease files make
+partial rent, old arrears and tenant turnover difficult to reconcile. A unit can
+keep its payment reference after its occupant changes. The project addresses
+this operational problem; measured savings or production adoption are not claimed.
 
-**Implementation decisions.** The workflow separates immutable received payments from invoice allocations and notification delivery. Payments settle the oldest outstanding invoices first, within both payment and invoice limits; excess remains visible as unapplied credit. A durable callback inbox recognizes repeat transaction IDs across matched and unmatched references. A PostgreSQL outbox retries notification failures with a bounded backoff and worker leases. Signing uses one versioned route, a time-limited link, OTP verification, tenant consent and an authenticated owner countersignature, retaining the original and final PDF hashes.
+**Decisions.** Keep received money, invoices, allocations and receipts distinct
+and immutable. Attribute obligations to a tenancy, apply money to its oldest debt
+first and keep excess as visible credit. Retain unmatched callbacks for scoped
+owner review. Put notifications in a durable outbox so a failed SMS cannot undo
+rent. Use versioned PDF hashes, OTP/consent evidence and an authenticated owner
+countersignature for agreements. Record corrections as additional entries rather
+than editing history.
 
-**Exception scenario — tested with synthetic data.** The same payment callback arrives five times concurrently while SMS is unavailable. Only one payment, receipt and automatic delivery job are created. The financial transaction remains committed after the SMS failure; a later worker retries the message without taking the rent again. A reused transaction ID with changed amount/reference is rejected for review. A separate PostgreSQL scenario loses the cloud queue acknowledgement after rent commits; the collector safely replays it, accepts the next partial payment and reconciles 20,000 with two receipts and no duplicate money. Competing allocations cannot exceed received money or invoice capacity.
+**Exception, proved with fictional records.** A former tenant pays using the
+unit's unchanged reference after a new lease starts. The callback is retained for
+review, without clearing the new tenant's invoice. The owner assigns it to the
+former tenancy with an audit reason; replay cannot create another payment or
+receipt. A separate concurrent-replay scenario sends the same callback five
+times while SMS fails: one payment and one receipt survive, then the worker
+retries the notification. A lost cloud acknowledgement is also replayed safely.
 
-**Evidence and limits.** The latest disposable PostgreSQL 18 run on 14 October 2026 passed 100 tests, executed all eleven migrations and exercised the application workflows, including signing under a non-superuser role with row security enabled. SMS/email are mocked. This demonstrates tested project behavior, not provider approval, live delivery or a certified electronic signature. External transport remains at least-once: a crash after provider acceptance can produce a duplicate notification, although it cannot duplicate the payment.
+**Evidence.** On 15 October 2026, 118 private application tests passed with zero
+skips on disposable PostgreSQL 18; a separate browser run exercised Owner's
+Corner, review, signing, reports and retry actions. Nine public sample tests are
+independent of that suite. SMS/email and OIDC transport are substituted in tests;
+actual Daraja confirmation, production identity/delivery and KRA acceptance remain
+unproved. [Exact verification and limits](VALIDATION.md).

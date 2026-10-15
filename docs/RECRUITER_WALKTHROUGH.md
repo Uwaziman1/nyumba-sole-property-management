@@ -45,3 +45,14 @@ The agreement screens illustrate tenant review/consent and a separate owner coun
 ## Suggested spoken introduction
 
 “Nyumba Sole is a property-management project that brings tenant records, payment reconciliation, reports and agreement workflows into one owner workspace. This public version contains synthetic screenshots and selected code examples. The full project uses Python, FastAPI and PostgreSQL, with integration foundations for M-Pesa, SMS, email and eTIMS. These previews demonstrate the user journey; production integrations and signing validation remain separate work.”
+
+
+## Current workflow verification — 15 October 2026
+
+The [ninth screenshot](../assets/screenshots/09-owner-corner-postgres.png) comes
+from a separate executed browser check against disposable PostgreSQL. Its visible
+banner marks fictional records and mocked delivery. That run checked all five
+owner attention actions, onboarding, signing/final download, retry, reports,
+former tenancies, owner payment review and a recorded reversal. The earlier eight
+images remain synthetic UI-harness illustrations. See [validation](VALIDATION.md)
+for exact test scope and remaining real-provider/deployment gates.

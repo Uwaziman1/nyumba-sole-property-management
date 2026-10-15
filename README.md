@@ -8,7 +8,13 @@ This repository is a **selected public showcase**, not the full application. The
 
 The full application is maintained separately in a private repository. This public repository is the portfolio link intended for application reviewers.
 
-Latest milestone check: **14 October 2026 — 100 private application tests passed, 0 failed, 0 skipped** on disposable PostgreSQL. Sandbox OAuth, C2B registration and simulation request acceptance were checked with Safaricom. Provider requests accepted; payment callback delivery unresolved. Our separate synthetic payment checks reconciled through Cloudflare and LocalTunnel HTTPS connections. A separately approved stable receiver and local collector are now implemented and tested. Safaricom accepted a new simulation, but no callback arrived during fifteen minutes. Confirmation remains unverified; local test services were stopped after testing. [Verification and limits](docs/VALIDATION.md). Earlier allocation and Owner’s Corner evidence remains in [weekly milestones](docs/WEEKLY_MILESTONES.md).
+Latest verification: **15 October 2026 — 118 private application tests passed,
+0 failed, 0 skipped**, with all 15 migrations on disposable PostgreSQL 18.
+Browser checks also passed for Owner's Corner, onboarding, signing, retries,
+reports, former tenancies and payment review. Monthly billing, tenancy-scoped
+allocation, immutable corrections and production session/role guards are now
+implemented and tested. Actual Daraja confirmation and production provider
+acceptance remain open. [Evidence and limits](docs/VALIDATION.md).
 
 ## Screenshots and demo tours
 
@@ -16,7 +22,14 @@ Latest milestone check: **14 October 2026 — 100 private application tests pass
 
 Read the [brief case study](docs/CASE_STUDY.md) for the manual problem, implementation decisions and a tested exception.
 
-See the [two-minute recruiter walkthrough](docs/RECRUITER_WALKTHROUGH.md) and [engineering walkthrough](docs/ENGINEERING_WALKTHROUGH.md). Eight screenshots show the sanitized application screens with synthetic fixtures. Each carries a visible preview banner. These are browser captures of a local UI harness, not evidence of a live database, provider delivery or completed signatures. Full UI source and the capture harness remain outside this repository.
+See the [two-minute recruiter walkthrough](docs/RECRUITER_WALKTHROUGH.md) and [engineering walkthrough](docs/ENGINEERING_WALKTHROUGH.md). The first eight screenshots show the sanitized application screens with synthetic fixtures. Each carries a visible preview banner. These are browser captures of a local UI harness, not evidence of a live database, provider delivery or completed signatures. Full UI source and the capture harness remain outside this repository.
+
+A ninth capture shows the owner workspace during the **executed disposable
+PostgreSQL browser check**, using fictional records and mocked delivery:
+
+![Owner workflow checked against disposable PostgreSQL](assets/screenshots/09-owner-corner-postgres.png)
+
+It demonstrates local database-backed UI verification, not live provider acceptance.
 
 ## Engineering evidence you can inspect
 
@@ -41,10 +54,10 @@ flowchart LR
     API --> Reports[ReportLab PDF reports]
     API --> Signing[Versioned agreement workflow / pypdf]
     Signing --> Evidence[Document hashes and audit evidence]
-    DB --> Outbox[eTIMS submission tracking]
+    DB --> Outbox[eTIMS historical records - transport disabled]
 ```
 
-The full project includes eleven PostgreSQL migrations. Its records separate holdings, properties, units, tenants, leases, rent terms, invoices, received payments, allocations, receipts, communications and agreement evidence. Authentication, roles, property membership and PostgreSQL row-level security define access boundaries; production needs properly separated runtime and migration roles.
+The full project includes fifteen PostgreSQL migrations. Its records separate holdings, properties, units, tenants, leases, rent terms, invoices, received payments, allocations, receipts, communications and agreement evidence. Authentication, roles, property membership and PostgreSQL row-level security define access boundaries; startup now enforces separate non-owner runtime roles and narrow service groups.
 
 ## Workflows represented in the project
 
@@ -60,12 +73,12 @@ These descriptions come from inspecting the full source. They are not claims of 
 
 | Area | Local/project implementation | Still requires production work |
 |---|---|---|
-| PostgreSQL | Migrations, accounting queries, lifecycle history | Broader reconciliation, deployment grants, backup/restore and monitoring |
+| PostgreSQL | Migrations, accounting queries, lifecycle history | Operational history review, deploy runtime logins and monitored recovery |
 | M-Pesa | Event parsing, allocations, substituted workflow checks and verified sandbox request acceptance | Approved Paybill, credentials, secured callbacks, sandbox validation |
 | SMS/email | Mock delivery and adapter implementations | Approved senders, credentials, actual delivery reports and consent review |
-| Signing | Single versioned route; OTP lockout, consent and finalization tested on PostgreSQL | Provider/identity assurance, browser usability, legal wording and retention |
-| KRA/eTIMS | Configurable adapter and submission tracking | Provisioned endpoint/payload validation, applicable tax treatment and provider approval |
-| Reports | PDF generators and database queries | Fresh reconciliation and visual output verification |
+| Signing | Single versioned route; OTP lockout, consent and finalization tested on PostgreSQL | Live identity/delivery, legal wording and retention |
+| KRA/eTIMS | Transport disabled; historical records preserved | Provisioned adapter, applicable tax treatment and provider approval |
+| Reports | PDF generators and database queries | Full visual output verification and operational reconciliation |
 
 No adapters or credentials are included here. The full sanitized local copy uses mock mode; publishing this showcase does not expose a working service.
 

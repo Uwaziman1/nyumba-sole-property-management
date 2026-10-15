@@ -37,3 +37,14 @@ End with the README's mocked/production-dependent table. M-Pesa, SMS/email and K
 Read the [brief case study](CASE_STUDY.md) for the manual problem, the choices made and the callback-plus-SMS-failure exception scenario.
 
 This is a selected systems-engineering showcase. It does not claim an AI agent, provider certification, a live deployment or exhaustive test coverage.
+
+
+## Current workflow verification — 15 October 2026
+
+The [ninth screenshot](../assets/screenshots/09-owner-corner-postgres.png) comes
+from a separate executed browser check against disposable PostgreSQL. Its visible
+banner marks fictional records and mocked delivery. That run checked all five
+owner attention actions, onboarding, signing/final download, retry, reports,
+former tenancies, owner payment review and a recorded reversal. The earlier eight
+images remain synthetic UI-harness illustrations. See [validation](VALIDATION.md)
+for exact test scope and remaining real-provider/deployment gates.

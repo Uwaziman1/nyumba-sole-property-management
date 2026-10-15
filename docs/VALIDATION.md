@@ -1,65 +1,132 @@
-# Workflow validation
+# Verification — 15 October 2026
 
-Checked on **14 October 2026**: **100 passed, 0 failed, 0 skipped, in 56.82 seconds**, against a new `nyumba_sole_test` on a separate loopback PostgreSQL 18 instance. All eleven migrations applied and repeated migration execution was safe. The runner removed the database; its instance was stopped and removed. The 62 existing dependency warnings concern FastAPI coroutine inspection and Pydantic alias metadata.
+The current private application suite passed **118 tests, 0 failed, 0 skipped, in
+38.26 seconds** on a fresh loopback PostgreSQL 18 instance. All **15 migrations**
+applied; the runner removed `nyumba_sole_test` and stopped and removed its cluster.
+One Authlib HTTP-client deprecation warning remains. These are executed results,
+not the historical 16- or 100-test totals.
 
-**Daraja status: provider requests accepted; payment callback delivery unresolved.** Safaricom accepted both C2B v1/v2 registration checks (ResponseCode `00000000`) and their separately identified 12,000 sandbox simulations (ResponseCode `0`). No provider confirmation reached the receiver during either three-minute diagnostic wait. Our separate fictional HTTPS confirmation did reach the receiver and was stored once in the durable unmatched-payment queue. The receiver status log contained only our requests. Provider callback delivery and the 12,000 + 8,000 provider scenario remain unverified; the second provider payment was not requested in either diagnostic.
+## Accounting and workflow checks
 
-An independent check through the real public HTTPS tunnel used our own fictional callback payloads: 12,000 left an 8,000 invoice balance, then 8,000 cleared it. Two distinct payments/receipts and 20,000 of allocations reconciled. Replaying the first callback created no extra payment, receipt or automatic delivery job. Both receipt PDF amounts/credit and the tenant statement were checked; two notification jobs used mocked transport. This proves the public receiver-to-PostgreSQL path, not Safaricom callback delivery.
+- 12,000 + 8,000 clears a 20,000 invoice; two 10,000 payments keep separate receipts.
+- A 25,000 catch-up payment pays 5,000 old debt before 20,000 current rent.
+- Monthly billing catches up after downtime, uses effective rent terms and applies
+  advance credit. Duplicate billing and excess allocations are rejected safely.
+- Invoice and payment obligations belong to a tenancy. A reused unit reference
+  after turnover enters owner review instead of paying the next tenant's debt.
+  Scoped, audited resolution is idempotent and preserves the original callback.
+- Recorded external refunds, deposit returns and reversals use separate immutable
+  entries. They preserve original payments/receipts, reopen debt when appropriate,
+  and reconcile net balances. They **do not initiate money transfers**.
+- Concurrent callback replay, conflicting transaction IDs, a lost cloud
+  acknowledgement and competing workers cannot duplicate received rent.
+- Delivery failures and retries preserve accounting. Mock jobs show SIMULATED;
+  transport acceptance is distinguished from verified delivery. A crash after
+  remote acceptance can still repeat a notification (at-least-once sending).
+- OTP attempts, expiry, consent, document versions, owner countersigning,
+  content-addressed final PDFs and tamper rejection run against PostgreSQL.
+- Actual restricted database groups process callbacks and worker jobs; the API
+  cannot inspect the raw callback inbox, change identity bindings, own tables,
+  bypass RLS or inherit another service group's global privileges.
+- OIDC Authorization Code/PKCE verifies signed identity tokens, issuer, audience,
+  state, nonce, MFA and fresh authentication. Valid and rejected flows use real
+  RSA/JWKS signatures with a fictional provider. Browser sessions are opaque,
+  revocable, HttpOnly/Secure cookies with CSRF and idle/absolute expiry.
 
-The temporary HTTPS receiver exposed only two authenticated callback POST routes. Six owner/admin/report/documentation paths returned 404; unauthenticated intake returned 401. The owner app and database stayed on loopback. Credentials, secret-bearing URLs, raw callbacks, logs, provider identifiers and generated evidence stay outside both repositories. Temporary services were stopped after each bounded check. No real payment or external tenant message was sent.
+An additional browser run against a separate disposable PostgreSQL database passed
+all five Owner's Corner attention destinations and resolution, onboarding,
+countersigning and final download, delivery retry, four-area navigation, report
+downloads, former-tenant history, unmatched-payment resolution and a recorded
+reversal. Only fictional records and mock delivery were used. The API, database
+and browser services were stopped afterwards.
 
-The integration run demonstrated a client defect: C2B v2's padded-zero registration success was initially rejected. Registration now accepts exactly `0` and `00000000`; other codes remain failures and payment simulation remains strict. An offline check rejects the STK sandbox shortcode for this C2B flow. Callback diagnostics record only fixed route categories, request method, response status and permitted schema field names, with no token, query, contact or payload output.
+## Dependencies, migration and recovery
 
-## Alternate connection check
+A new Python environment installed the patched requirements and passed `pip check`.
+Its exact reachable versions are recorded in private `constraints.txt`; Linux-only
+dependencies still need the configured Linux CI/image checks.
+An OSV scan of 15 direct and 47 reachable installed packages returned zero known
+findings on this check. This is a time-bounded advisory result, not a guarantee of
+absence of vulnerabilities.
 
-A further controlled check used a separately approved LocalTunnel HTTPS connection, an alternative recommended for local testing in Safaricom's getting-started guidance. Safaricom accepted registration and a new, separately identified 12,000 simulation, but no provider request reached any receiver route during the three-minute wait. The second provider payment was not requested. A separate fresh synthetic session through LocalTunnel then reconciled 12,000 + 8,000, two receipts, two allocations, a zero balance, duplicate replay, both receipt PDF contents and the statement; two notification jobs were mocked. Together with the earlier Cloudflare synthetic check, this verifies the application path through two temporary connections. It does not establish why Safaricom's confirmation was absent or prove provider delivery. All temporary services and disposable databases were stopped and removed. The next action is a provider-side delivery investigation, rather than blindly repeating accepted simulations.
+A private, read-only snapshot of the original database was restored to a separate
+disposable instance: all 26 table fingerprints matched. The verified legacy
+upgrade then applied migrations 010–015 without rewriting original payment,
+allocation, receipt or signing evidence. A fictional restricted-role 12,000 +
+8,000 callback check reconciled on the upgraded clone. Original files and database
+were left unchanged. Historical attribution and missing-document recovery still
+require review before any operational cutover; database restoration alone does
+not establish complete document recovery.
 
-## Further sandbox diagnostics
+## Online and provider limits
 
-The simulator payload now sends shortcode and test MSISDN as JSON numbers, following the current provider contract. A query-free authenticated callback experiment also passed our own validation check without writing rent. A separate accepted provider simulation was observed for more than fifteen minutes without a confirmation. A later registration attempt using the portal test preset was rejected before any payment request; its cause remains unverified. HTTP status, numeric provider error code and an allowlisted error category are now available without exposing descriptions, callback tokens or provider identifiers. New regression cases verify that private provider content is omitted. No blind payment resubmission or support email was sent.
+The hosted receiver is a **fictional sandbox transit queue**, not the full app.
+Its durable quota, bounded body parsing, separate ingress/pull secrets, payload
+minimization, authenticated operations view and retention checks pass 11 tests.
+Acknowledged payloads are stripped after 30 days while deduplication tombstones
+remain; unacknowledged money events are retained. Sanitized diagnostic status is
+removed after 90 days. Maintenance runs on authenticated polls/operations calls;
+an unattended schedule and external alert notification are not configured.
 
-A stable hosted sandbox transit queue and local collector are now implemented and tested. They are not evidence of genuine provider delivery. The full application and PostgreSQL remain local.
+Live health/readiness and anonymous-denial probes pass. The authenticated queue
+was empty when checked. Synthetic intake/collection proves our path; **actual
+Safaricom C2B confirmation delivery remains unverified**. Accepted registration
+or simulation responses do not prove payment confirmation. Separate real status
+callbacks previously returned error 8006 (locked sandbox API user); no verified
+unlock or successful replacement result is available. That does not establish
+why C2B confirmation was absent. No blind resubmission or support email was sent.
 
-## Stable receiver and local collection
+Real SMS/email delivery, a configured live identity provider, production Paybill,
+provider permissions, full-app hosting and monitored recovery are outstanding.
+KRA transport is deliberately disabled: startup rejects enabling it until a
+provisioned adapter and business-result validation exist. Disabling an unsafe
+placeholder closes false-success behavior; it does not complete KRA integration.
 
-The owner approved a stable hosted receiver for fictional sandbox events. Public health returned HTTP 200; anonymous confirmation and queue collection returned 401. Fifteen private hosted queue checks and fifteen further checks without platform sign-in passed, including concurrent replay, conflict rejection, personal field stripping and persistence until acknowledgement. The full app, PostgreSQL and tenant records stayed local; consumer credentials were not installed on the receiver or committed to either repository.
+The non-root container, supervised worker composition and PostgreSQL CI workflow
+are prepared. Docker's daemon was unavailable locally, so an image build is not
+claimed. Selected receipt/statement/turnover layouts and a synthetic 80-row, three-page monthly report were rendered and inspected. Long unit references now fit their columns and monthly headings repeat. Full-template visual QA, production legal/retention review and load testing
+remain open. The migration chain includes fictional seed SQL and is not a clean
+production bootstrap.
 
-Safaricom rejected registration using the portal test preset before any payment request. Registration using the original C2B sandbox shortcode was accepted. A new, separately identified fictional 12,000 simulation was then accepted, but no provider confirmation arrived during a fifteen-minute observation. The second provider payment was not requested. The hosted queue remained empty; local services and the disposable database were removed. The receiver remains available for delayed delivery. No support email or blind payment retry was sent.
+## Reproduce safely
 
-The reusable private application collector acknowledges a hosted event only after local PostgreSQL intake confirms commit. An actual FastAPI/PostgreSQL test uses a cloud substitute to lose the first acknowledgement after a 12,000 payment commits. A second collection replays that payment and processes 8,000; only two payments, two receipts, two notification jobs and 20,000 of allocations exist, with zero invoice balance. Notification delivery is mocked. This proves safe local replay, not Safaricom delivery.
+From the private app, set `POSTGRES_TEST_ADMIN_URL` only in the process environment
+to the `postgres` database on a new disposable loopback PostgreSQL server, then
+run `python -m scripts.validate_postgres`. It refuses an existing test database,
+creates only `nyumba_sole_test`, runs the suite, and removes it in `finally`.
+Direct pytest without `TEST_DATABASE_URL` skips database cases; that is not the
+118-test verification above. Never supply an everyday development/production DB.
 
-The first expanded run passed 80 tests and had 20 setup errors because two test modules attempted to initialize the same database. The new scenario was moved into the existing fixture scope. A fresh full rerun passed all 100 tests, with no skipped cases. See [sandbox relay](SANDBOX_RELAY.md) for the connection and local use.
+The public sample suite was rerun: **9 passed in 2.02 seconds**.
+The public repository contains nine executable sample tests only; its SQL excerpt
+requires the private schema and is not a standalone migration or integration test.
 
-## Behavior checked on PostgreSQL
+## Primary implementation references
 
-- Partial payments of 12,000 + 8,000 against 20,000; separate 10,000 receipts; catch-up allocation of 5,000 old debt then 20,000 current rent; oldest-debt-first handling and visible unapplied credit.
-- Concurrent callbacks, conflicting transaction IDs, unmatched replays and competing allocations. Rejected allocations leave balances unchanged; financial and signing evidence remains append-only.
-- Callback intake and its receipt outbox commit together. Message failure, later retry, worker competition, stale leases and exhausted attempts do not change received rent.
-- Persisted document versions, OTP delivery activation, failed-attempt lockout, resend/cancellation, PDF tamper checks, tenant replay rejection, authenticated owner countersigning and final PDF hashes under a NOSUPERUSER/NOBYPASSRLS role.
-- Reports and workspace totals reconcile for tested scenarios. Owner's Corner destination and derived-state checks continue to pass. Earlier real local browser verification remains recorded in [weekly milestones](WEEKLY_MILESTONES.md); it was not repeated for this transport change.
-- Local credential setup preserves literal values, applies owner-only file permissions and refuses overwriting settings or saving them in the source repository. Authentication-only mode needs no callback/database and returns no access token.
-- The callback-only gateway restricts routes, validates credentials/shortcodes/bodies, refuses production and non-loopback upstreams, redacts acknowledgements and omits secrets from diagnostics.
+Role separation follows [PostgreSQL row-security behavior](https://www.postgresql.org/docs/18/ddl-rowsecurity.html),
+including owner/superuser bypass. Backup verification follows
+[pg_dump](https://www.postgresql.org/docs/18/app-pgdump.html) and
+[pg_restore](https://www.postgresql.org/docs/18/app-pgrestore.html).
+Identity follows [OpenID Connect Core](https://openid.net/specs/openid-connect-core-1_0.html),
+[Authlib web clients](https://docs.authlib.org/en/latest/oauth2/client/web/) and
+[OWASP session guidance](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html).
+Provider gates reflect [Daraja C2B](https://developer.safaricom.co.ke/apis/CustomerToBusiness),
+[Daraja API-user errors](https://developer.safaricom.co.ke/apis/BusinessToCustomer), and
+[KRA's provisioned system-to-system route](https://www.kra.go.ke/business/etims-electronic-tax-invoice-management-system/learn-about-etims/etims-system-to-system-integration).
 
-## Earlier results
 
-Earlier workflow/weekly increments passed 29, 33 and 35 tests. Daraja preparation then passed 63 tests in 20.48 seconds; local authentication setup passed 72 in 47.01 seconds. Five gateway tests initially ran separately in 1.59 seconds. A subsequent combined run passed 77 in 48.93 seconds before the latest two regression cases. A later 79-test check preceded the four safe-provider-diagnostics regression cases in the earlier 83-test suite. These counts describe historical checks, not additional tests to add to the current 100. The public sample suite's earlier result remains **9 passed in 0.56 seconds**; it was not rerun for documentation-only public changes.
+## Receiver dependency/deployment follow-up
 
-## Reproduce
+Receiver **version 4** was built and published on 15 October 2026. Eleven
+protocol/storage tests and TypeScript checking passed. Live readiness returned
+200, anonymous operations access 401, authenticated operations 200, and the queue
+contained zero pending events. The probe sent no payment request and acknowledged
+no events. Its poll verifies access, not unattended collector supervision.
 
-Supply `POSTGRES_TEST_ADMIN_URL` locally for the `postgres` database on a disposable loopback instance, using an account with CREATEDB/CREATEROLE there only. Run `python -m scripts.validate_postgres` from the private app root. It refuses an existing `nyumba_sole_test`, creates only that test database and removes it in `finally`. Tests refuse populated/non-loopback/development targets. Direct pytest execution without `TEST_DATABASE_URL` skips database cases.
-
-## Remaining production dependencies
-
-The callback token is a shared ingress secret, not a Safaricom signature. Production needs an approved Paybill/Till, provisioned provider settings, stable controlled HTTPS, query redaction, secret rotation, appropriate ingress restrictions and monitored reconciliation. Temporary Quick Tunnels have no uptime guarantee. Callback non-arrival alone does not establish its cause.
-
-SMS/email transport acceptance does not prove handset/inbox delivery. The worker provides at-least-once sending; a crash after remote acceptance may repeat a notification, although it cannot duplicate rent. OTP payloads in pending jobs require private/encrypted storage and access/retention controls. API roles must not own tables or bypass row security; callback/worker roles need a separate least-privilege grant review.
-
-The sanitized migration chain seeds fictional data and is for a new demo database. It must not replace migrations in an operational installation. KRA schemas/tax treatment/provider acceptance, backup/restore, full report visual QA, signing browser usability and production deployment remain separate checks. No legal signature certification, clean dependency installation or container build is claimed.
-
-References: [PostgreSQL locking](https://www.postgresql.org/docs/18/explicit-locking.html), [row security](https://www.postgresql.org/docs/18/ddl-rowsecurity.html), [Safaricom C2B](https://developer.safaricom.co.ke/apis/CustomerToBusiness), [Cloudflare Quick Tunnels](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/).
-
-## Current simulation endpoint
-
-The signed-in Daraja C2B Environments table lists both registration and simulation under v2. The client default, example configuration and transport regression test now use v2 simulation. A fresh full suite passed all 100 cases in 56.82 seconds. An independent new fictional reference was used for a v2 provider check; registration and simulation were accepted, but no confirmation arrived during three minutes. This was not a retry of the earlier accepted v1 request. The second payment was not requested; local services and the disposable database were removed. This fixes a demonstrated configuration discrepancy without claiming it caused the missing callbacks. Current reference: [Daraja C2B portal](https://developer.safaricom.co.ke/dashboard/apis?api=CustomerToBusiness).
-
-A further independent v2 control used the documented one-shilling amount and a fresh fictional reference. Its registration and simulation were accepted, but no confirmation arrived during three minutes. No second payment was requested. This does not establish a sandbox balance limit or the reason for non-delivery. Payment requests were stopped; the durable receiver remains available.
+The refreshed dependency graph has zero flagged production dependency nodes.
+One unpatched `braces` development parser advisory, GHSA-vfj7-8cjw-p6xm, remains
+through eight ancestor/package entries. Those build tools use repository-controlled
+patterns; no occurrence of their package paths/names was found in emitted worker
+JavaScript/source maps. This is bounded dependency/bundle evidence, not a
+penetration test or a claim that every security gap is closed. Build warnings
+concern sourcemaps, timing and future configuration compatibility.
