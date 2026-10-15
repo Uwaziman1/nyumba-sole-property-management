@@ -43,8 +43,8 @@ and browser services were stopped afterwards.
 ## Dependencies, migration and recovery
 
 A new Python environment installed the patched requirements and passed `pip check`.
-Its exact reachable versions are recorded in private `constraints.txt`; Linux-only
-dependencies still need the configured Linux CI/image checks.
+Its exact reachable versions are recorded in private `constraints.txt`; Linux installation/workflow verification subsequently passed as recorded below;
+Docker image execution remains unverified.
 An OSV scan of 15 direct and 47 reachable installed packages returned zero known
 findings on this check. This is a time-bounded advisory result, not a guarantee of
 absence of vulnerabilities.
@@ -130,3 +130,15 @@ patterns; no occurrence of their package paths/names was found in emitted worker
 JavaScript/source maps. This is bounded dependency/bundle evidence, not a
 penetration test or a claim that every security gap is closed. Build warnings
 concern sourcemaps, timing and future configuration compatibility.
+
+
+## Independent Linux CI check
+
+After publication, GitHub Actions installed the constrained requirements on
+Ubuntu/Python 3.14 with PostgreSQL 18: `pip check` passed, then **118 tests passed
+in 10.89 seconds**, with one warning and no failed/skipped tests. The disposable
+database was removed. This completes the Linux installation/workflow check
+identified above; Docker image build/run remains unverified.
+[Executed code commit and workflow](https://github.com/Uwaziman1/nyumba-sole-app/actions/runs/38724612082)
+(private repository; access required). Code commit:
+`27883d4ace30a9ed0d758f48d0a288a1fe196cf9`.
